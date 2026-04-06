@@ -9,6 +9,7 @@ import { CartPage } from '../pages/CartPage'
 
 
 test.describe("Cart Page Validation", () => {
+    console.log("Cart Page Validation");
     let loginPage: LoginPage
     let productPage: ProductPage
     let cartPage: CartPage

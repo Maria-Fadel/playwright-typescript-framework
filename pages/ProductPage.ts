@@ -100,7 +100,7 @@ export class ProductPage {
 
     }
     async getSpecificProductDetails(productName: string[]) {
-        const allNames = await this.page.locator(productPageLocators.productNames).allTextContents();console.log(allNames);
+        const allNames = await this.page.locator(productPageLocators.productNames).allTextContents();
         const allDescripitons = await this.page.locator(productPageLocators.productDescription).allTextContents();
         const allPrice = await this.page.locator(productPageLocators.productPrices).allTextContents();
         // Array of object [{name, description, price}, {}, {}]

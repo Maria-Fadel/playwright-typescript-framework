@@ -7,6 +7,7 @@ import { productPageLocators } from '../locators/ProductPageLocators';
 import { productsToCart } from '../test-data/products';
 
 test.describe("product page validation", () => {
+    console.log("product page validation");
     let loginPage: LoginPage;
     let productpage: ProductPage;
 

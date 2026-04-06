@@ -12,6 +12,7 @@ import { FinalPage } from '../../pages/FinalPage'
 
 
 test.describe("End To End Test", () => {
+    console.log("End To End Test");
     let loginPage: LoginPage
     let productPage: ProductPage
     let cartPage : CartPage
