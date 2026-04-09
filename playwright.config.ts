@@ -14,6 +14,7 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './tests',
    reporter: [
+    ['list'],     
     ['allure-playwright']
   ],
   /* Run tests in files in parallel */
