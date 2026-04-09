@@ -29,15 +29,12 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Run Playwright Tests (shared${{ matrix.shared }})
-        run: npx playwright test --shared=${{ matrix.shared }}/4
-
-      - name: Run Playwright Smoke Tests
-        run: npx playwright test tests/E2E --project=chromium
+      - name: Run Playwright Tests (shard ${{ matrix.shared }})
+        run: npx playwright test --shard=${{ matrix.shared }}/4
 
       - name: Upload Playwright Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.shared }}
           path: playwright-report/
