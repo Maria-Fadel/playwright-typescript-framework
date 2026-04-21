@@ -7,6 +7,7 @@ import { productPageLocators } from '../locators/ProductPageLocators';
 import { productsToCart } from '../test-data/products';
 
 test.describe("product page validation", () => {
+    console.log("product page validation");
     let loginPage: LoginPage;
     let productpage: ProductPage;
 
@@ -55,13 +56,13 @@ test.describe("product page validation", () => {
         const sorted = [...names].sort().reverse();
         expect(names).toEqual(sorted);
     })
-    test.only("Filer By Price Low to High", async ({ page }) => {
+    test("Filer By Price Low to High", async ({ page }) => {
         await productpage.filterByPriceLowToHigh();
         const preices = await productpage.getProductPrices();
         const sortedPreice =[...preices].sort((a,b) => a-b)
         expect(preices).toEqual(sortedPreice);
     })
-    test.only("Filer By Name High to Low", async ({ page }) => {
+    test("Filer By Name High to Low", async ({ page }) => {
              await productpage.filterByPriceHighToLow();
         const preices = await productpage.getProductPrices();
         const sortedPreice =[...preices].sort((a,b) => b-a)
