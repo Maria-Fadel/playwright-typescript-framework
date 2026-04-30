@@ -3,7 +3,8 @@ import { LoginPage } from '../pages/LoginPage';
 import { BASE_URL, USERNAME, PASSWORD } from '../utils/envConfig';
 
 test('login to sauceDemo application with vaild credentials',async ({ page }) => {
-    const loginPage = new LoginPage(page);
+  console.log("login to sauceDemo application with vaild credentials");
+  const loginPage = new LoginPage(page);
   await page.goto(BASE_URL);
   await loginPage.login(USERNAME,PASSWORD)
 

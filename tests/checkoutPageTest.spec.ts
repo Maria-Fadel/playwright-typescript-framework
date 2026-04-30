@@ -8,6 +8,7 @@ import { CheckoutPage } from '../pages/CheckoutPage'
 import { checkoutData } from '../test-data/checkoutData'
 
 test.describe("Checkout Page Validation", () => {
+    console.log("Checkout Page Validation");
     let loginPage: LoginPage
     let productPage: ProductPage
     let cartPage : CartPage
