@@ -1,4 +1,4 @@
-name: Playwright Tests with Allure Report
+name: Playwright Tests (Docker + Allure)
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  playwright-tests:
+  test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -19,28 +19,37 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      # 🧠 Cache für npm (macht Builds deutlich schneller)
+      - name: Cache node_modules
+        uses: actions/cache@v4
         with:
-          node-version: 18
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            npm-
 
-      - name: Install dependencies
-        run: npm ci
+      # 🐳 Docker Build (einmal pro Job)
+      - name: Build Docker image
+        run: docker build -t playwright-tests .
 
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+      # 🧪 Tests im Container ausführen (Shard)
+      - name: Run tests (Shard ${{ matrix.shard }})
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}/allure-results:/app/allure-results \
+            playwright-tests \
+            npx playwright test --shard=${{ matrix.shard }}/4
 
-      - name: Run Playwright tests (Shard ${{ matrix.shard }})
-        run: npx playwright test --shard=${{ matrix.shard }}/4
-
-      - name: Upload Allure results (Shard ${{ matrix.shard }})
+      # 📦 Allure Results speichern
+      - name: Upload Allure results
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results-shard-${{ matrix.shard }}
+          name: allure-results-${{ matrix.shard }}
           path: allure-results
+          if-no-files-found: ignore
 
-  merge-allure-report:
-    needs: playwright-tests
+  allure-report:
+    needs: test
     if: always()
     runs-on: ubuntu-latest
 
@@ -48,29 +57,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install Allure CLI
-        run: npm install -g allure-commandline
-
-      - name: Download all Allure results
+      # 📥 Alle Shards laden
+      - name: Download Allure results
         uses: actions/download-artifact@v4
         with:
           path: allure-results
 
-      - name: Merge Allure results
+      # 🧠 Merge sauberer (robuster als dein cp)
+      - name: Merge results
         run: |
           mkdir merged-results
-          find allure-results -type f -exec cp {} merged-results \;
+          find allure-results -name "*.json" -exec cp {} merged-results \;
 
-      - name: Generate final Allure report
+      # 📊 Allure installieren
+      - name: Install Allure CLI
+        run: npm install -g allure-commandline
+
+      # 📈 Report generieren
+      - name: Generate Allure report
         run: allure generate merged-results --clean -o allure-report
 
-      - name: Upload final Allure report
+      # 📤 Upload
+      - name: Upload Allure report
         uses: actions/upload-artifact@v4
         with:
-          name: allure-report-final
+          name: allure-report
           path: allure-report
