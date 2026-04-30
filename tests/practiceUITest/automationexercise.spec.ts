@@ -7,8 +7,12 @@ test('User Registration using dynamic data', async ({ page }) => {
   const user = createUser();
 
   await page.goto('https://automationexercise.com'); 
-  await page.locator('button.fc-cta-consent').click();
-  await page.locator('a[href="/login"]').click();
+
+await page.locator('.fc-cta-consent')
+  .first()
+  .click({ timeout: 5000 })
+  .catch(() => {});
+  await page.getByRole('link', { name: 'Signup / Login' }).click();
 
   await page.fill('input[data-qa="signup-name"]',  user.name);
   await page.fill('input[data-qa="signup-email"]', user.email);
