@@ -1,3 +1,4 @@
+import { fa } from '@faker-js/faker';
 import { defineConfig, devices } from '@playwright/test';
 
 /**

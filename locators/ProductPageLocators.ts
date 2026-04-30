@@ -4,7 +4,7 @@ export const productPageLocators = {
     logoutLink: "#logout_sidebar_link",
     aboutLink: "#about_sidebar_link",
     requestDemoButton: (page: Page) =>
-        page.getByRole('button', { name: 'Request a demo' }),
+        page.getByRole('button', { name: 'Book a demo' }),
 
     tryItFreeButton: (page: Page) =>
         page.getByRole('button', { name: 'Try it free' }),
